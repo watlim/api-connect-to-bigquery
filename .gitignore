@@ -9,7 +9,7 @@ __pycache__/
 logs
 tmp
 Key
-test
+tests
 data
 
 # C extensions
