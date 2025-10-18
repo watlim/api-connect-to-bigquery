@@ -1,0 +1,20 @@
+{
+  "name": "http-source-connector",
+  "config": {
+    "connector.class": "io.confluent.connect.http.HttpSourceConnector",
+    "tasks.max": "1",
+
+    "url": "https://datagov.mot.go.th/en/api/3/action/datastore_search?limit=5&resource_id=a139ab23-602f-4c0d-8789-4d230bcdf33d",
+    "topic.name.pattern": "api-data-topic",
+
+    "http.offset.mode": "SIMPLE_INCREMENTING",
+    "http.initial.offset": 0,
+
+    "confluent.topic.bootstrap.servers": "broker:29092",
+    "confluent.topic.replication.factor": "1",
+
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
+  }
+}
