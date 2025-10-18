@@ -11,6 +11,7 @@ tmp
 Key
 tests
 data
+spark-events
 
 # C extensions
 *.so
