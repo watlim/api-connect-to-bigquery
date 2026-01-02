@@ -1,7 +1,5 @@
 from airflow.decorators import dag,task
 from datetime import datetime, timedelta
-import requests
-import pandas as pd
 import json
 import os
 from time import sleep
@@ -41,7 +39,7 @@ def upload_to_gcs(bucket_name, source_file_name, destination_blob_name):
             blob = bucket.blob(destination_blob_name)
             blob.upload_from_filename(source_file_name)
 
-            print(f"✅ Uploaded {source_file_name} → gs://{bucket_name}/{destination_blob_name}")
+            print(f"Uploaded {source_file_name} → gs://{bucket_name}/{destination_blob_name}")
 
 
 @dag(default_args=default_args, schedule='@daily', start_date=datetime(2023, 8, 27), catchup=False)
@@ -59,7 +57,7 @@ def work_flow():
                 for message in consumer:
                     try:
                         data = json.loads(message.value.decode("utf-8"))
-                        print(f"📩 Received message: {data}")
+                        print(f"Received message: {data}")
 
                         # ตั้งชื่อไฟล์ตาม train_id + timestamp
                         train_id = data.get("id", "unknown")
@@ -85,7 +83,7 @@ def work_flow():
                             break
 
                     except json.decoder.JSONDecodeError as e:
-                        print(f"❌ JSON decode error: {e}")
+                        print(f"JSON decode error: {e}")
                         continue
             except KeyboardInterrupt:
                 print("Stopping consumer...")
@@ -122,7 +120,7 @@ def work_flow():
             from datagov
         """)
         df.write.mode("overwrite").parquet(OUTPUT_PATH)
-        print(f"✅ Data written successfully to {OUTPUT_PATH}")
+        print(f"Data written successfully to {OUTPUT_PATH}")
 
 
     Bigquery = GCSToBigQueryOperator(
