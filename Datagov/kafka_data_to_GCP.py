@@ -8,14 +8,14 @@ from google.oauth2 import service_account
 from kafka import KafkaConsumer
 
 # -----------------------------
-# Config สำหรับ Kafka บน Docker
+# config สำหรับ kafka บน docker
 # -----------------------------
 BOOTSTRAP_SERVERS = "broker:29092"   # หรือ "kafka:9092" ถ้าอยู่ใน docker network เดียวกัน
 TOPIC_NAME = "api-data-topic"
 CONSUMER_GROUP = "datagov-consumer-group"
 
 # -----------------------------
-# Config สำหรับ GCP
+# config สำหรับ GCP
 # -----------------------------
 GCP_PROJECT_ID = "datath-th-kafka"
 BUCKET_NAME = "kafka_syce_gcp"
@@ -24,7 +24,7 @@ DESTINATION_FOLDER = f"{BUSINESS_DOMAIN}/raw"
 KEYFILE_PATH = "/opt/Key/datath-th-kafka-5dbcfce64148.json"
 
 # -----------------------------
-# Kafka Consumer (Docker)
+# kafka consumer (docker)
 # -----------------------------
 consumer = KafkaConsumer(
     TOPIC_NAME ="api-data-topic",
@@ -47,17 +47,17 @@ def upload_to_gcs(bucket_name, source_file_name, destination_blob_name):
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_filename(source_file_name)
 
-    print(f"✅ Uploaded {source_file_name} → gs://{bucket_name}/{destination_blob_name}")
+    print(f"Uploaded {source_file_name} → gs://{bucket_name}/{destination_blob_name}")
 
 
 # -----------------------------
-# Consume messages from Kafka Docker
+# consume messages from kafka docker
 # -----------------------------
 try:
     for message in consumer:
         try:
             data = json.loads(message.value.decode("utf-8"))
-            print(f"📩 Received message: {data}")
+            print(f"Received message: {data}")
 
             # ตั้งชื่อไฟล์ตาม train_id + timestamp
             train_id = data.get("train_id", "unknown")
@@ -78,10 +78,10 @@ try:
             sleep(3)
 
         except json.decoder.JSONDecodeError:
-            print("⚠️ Invalid JSON message, skipped")
+            print("Invalid JSON message, skipped")
             continue
 
 except KeyboardInterrupt:
-    print("🛑 Stopped by user")
+    print("Stopped by user")
 finally:
     consumer.close()
